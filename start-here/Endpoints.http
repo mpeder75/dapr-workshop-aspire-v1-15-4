@@ -10,7 +10,7 @@ POST {{pizzaOrderUrl}}/order
 Content-Type: application/json
 
 {
-    "orderId": "123",
+    "orderId": "123456",
     "pizzaType": "pepperoni",
     "size": "large",
     "customer": {
