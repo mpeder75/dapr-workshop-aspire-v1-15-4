@@ -1,7 +1,7 @@
 using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
 using PizzaWorkflow.Models;
-using PizzaWorkflow.Workflows;
+using PizzaWorkflow.Workflow;
 
 namespace PizzaWorkflow.Controllers;
 

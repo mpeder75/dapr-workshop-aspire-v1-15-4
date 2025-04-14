@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaOrder", "PizzaOrder\Pi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaStorefront", "PizzaStorefront\PizzaStorefront.csproj", "{70D4BC66-0DCC-4D39-962B-B3D978F81FC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaWorkflow", "PizzaWorkflow\PizzaWorkflow.csproj", "{A0E3DCD7-5D2E-4EAC-B97F-0F079B2CBBBA}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
 	ProjectSection(SolutionItems) = preProject
 		resources\statestore.yaml = resources\statestore.yaml
@@ -44,10 +42,6 @@ Global
 		{70D4BC66-0DCC-4D39-962B-B3D978F81FC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70D4BC66-0DCC-4D39-962B-B3D978F81FC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70D4BC66-0DCC-4D39-962B-B3D978F81FC6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A0E3DCD7-5D2E-4EAC-B97F-0F079B2CBBBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A0E3DCD7-5D2E-4EAC-B97F-0F079B2CBBBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A0E3DCD7-5D2E-4EAC-B97F-0F079B2CBBBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A0E3DCD7-5D2E-4EAC-B97F-0F079B2CBBBA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E52AAB44-B429-41FE-BFD5-4E861D34B05B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E52AAB44-B429-41FE-BFD5-4E861D34B05B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E52AAB44-B429-41FE-BFD5-4E861D34B05B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -59,5 +53,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1DE8C866-0C50-4874-8AE4-3F531EB15EAE}
 	EndGlobalSection
 EndGlobal

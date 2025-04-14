@@ -98,7 +98,7 @@ public class OrderStateService : IOrderStateService
         update.Customer = update.Customer ?? existing.Customer;
         update.PizzaType = update.PizzaType ?? existing.PizzaType;
         update.Size = update.Size ?? existing.Size;
-        
+
         return update;
     }
 }
