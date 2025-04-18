@@ -24,7 +24,8 @@ if (app.Environment.IsDevelopment())
 // Dapr bruger cloudevents til sin pubsub mekanisme
 app.UseCloudEvents();
 
-// Opsætter et endpoint sp Dapr kan subscribe til topics
+// Needed for Programmatic Dapr pub/sub routing
+// Opsætter et endpoint så Dapr kan subscribe til topics
 app.MapSubscribeHandler();
 
 app.MapControllers();

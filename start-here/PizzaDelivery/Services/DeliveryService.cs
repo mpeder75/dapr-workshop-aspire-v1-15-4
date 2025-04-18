@@ -1,4 +1,5 @@
 using PizzaDelivery.Models;
+using Dapr.Client;
 
 namespace PizzaDelivery.Services;
 
@@ -9,10 +10,15 @@ public interface IDeliveryService
 
 public class DeliveryService : IDeliveryService
 {
+    private readonly DaprClient _daprClient;
     private readonly ILogger<DeliveryService> _logger;
 
-    public DeliveryService(ILogger<DeliveryService> logger)
+    private const string PUBSUB_NAME = "pizzapubsub";
+    private const string TOPIC_NAME = "orders";
+
+    public DeliveryService(DaprClient daprClient, ILogger<DeliveryService> logger)
     {
+        _daprClient = daprClient;
         _logger = logger;
     }
 
@@ -35,11 +41,15 @@ public class DeliveryService : IDeliveryService
                 order.Status = status;
                 _logger.LogInformation("Order {OrderId} - {Status}", order.OrderId, status);
 
+                await _daprClient.PublishEventAsync(PUBSUB_NAME, TOPIC_NAME, order);
+
                 await Task.Delay(TimeSpan.FromSeconds(duration));
             }
 
             order.Status = "delivered";
-            _logger.LogInformation("Order {OrderId} - {Status}", order.OrderId, order.Status);
+
+            await _daprClient.PublishEventAsync(PUBSUB_NAME, TOPIC_NAME, order);
+
             return order;
         }
         catch (Exception ex)
@@ -47,6 +57,8 @@ public class DeliveryService : IDeliveryService
             _logger.LogError(ex, "Error delivering order {OrderId}", order.OrderId);
             order.Status = "delivery_failed";
             order.Error = ex.Message;
+
+            await _daprClient.PublishEventAsync(PUBSUB_NAME, TOPIC_NAME, order);
             return order;
         }
     }

@@ -21,6 +21,7 @@
     <ProjectReference Include="..\PizzaKitchen\PizzaKitchen.csproj" />
     <ProjectReference Include="..\PizzaOrder\PizzaOrder.csproj" />
     <ProjectReference Include="..\PizzaStorefront\PizzaStorefront.csproj" />
+    <ProjectReference Include="..\PizzaWorkflow\PizzaWorkflow.csproj" />
   </ItemGroup>
 
 </Project>
