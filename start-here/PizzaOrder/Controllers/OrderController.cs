@@ -55,7 +55,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost("/orders-sub")]
-    [Topic("pizzapubsub", "orders")] // Programmatic Dapr pub/sub topic 
+    [Topic("pizzapubsub", "orders")]
     public async Task<IActionResult> HandleOrderUpdate(Order cloudEvent)
     {
         _logger.LogInformation("Received order update for order {OrderId}", cloudEvent.OrderId);

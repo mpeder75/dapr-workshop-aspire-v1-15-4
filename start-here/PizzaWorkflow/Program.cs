@@ -4,7 +4,7 @@ using PizzaWorkflow.Workflows;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+builder.AddServiceDefaults();
 
 // BUG: The following line is missing from the original code
 builder.Services.AddControllers().AddDapr();
@@ -26,11 +26,19 @@ builder.Services.AddDaprWorkflow(options =>
 
 var app = builder.Build();
 
+app.MapDefaultEndpoints();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Dapr will send serialized event object vs. being raw CloudEvent
+app.UseCloudEvents();
+
+// needed for Dapr pub/sub routing
+app.MapSubscribeHandler();
 
 app.MapControllers();
 app.Run();

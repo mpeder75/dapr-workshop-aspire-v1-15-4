@@ -1,11 +1,11 @@
-using PizzaDelivery.Models;
 using Dapr.Client;
+using PizzaShared.Messages.Delivery;
 
 namespace PizzaDelivery.Services;
 
 public interface IDeliveryService
 {
-    Task<Order> DeliverPizzaAsync(Order order);
+    Task<DeliverResultMessage> DeliverPizzaAsync(DeliverMessage deliverMessage);
 }
 
 public class DeliveryService : IDeliveryService
@@ -22,7 +22,7 @@ public class DeliveryService : IDeliveryService
         _logger = logger;
     }
 
-    public async Task<Order> DeliverPizzaAsync(Order order)
+    public async Task<DeliverResultMessage> DeliverPizzaAsync(DeliverMessage deliverMessage)
     {
         var stages = new (string status, int duration)[]
         {
@@ -34,22 +34,28 @@ public class DeliveryService : IDeliveryService
             ("delivery_at_location", 1)
         };
 
+        var order = new DeliverResultMessage
+        {
+            WorkflowId = deliverMessage.WorkflowId,
+            OrderId = deliverMessage.OrderId,
+            PizzaType = deliverMessage.PizzaType,
+            Size = deliverMessage.Size,
+            Customer = deliverMessage.Customer,
+            Status = "unknown"
+        };
+
         try
         {
             foreach (var (status, duration) in stages)
             {
                 order.Status = status;
                 _logger.LogInformation("Order {OrderId} - {Status}", order.OrderId, status);
-
                 await _daprClient.PublishEventAsync(PUBSUB_NAME, TOPIC_NAME, order);
-
                 await Task.Delay(TimeSpan.FromSeconds(duration));
             }
 
             order.Status = "delivered";
-
             await _daprClient.PublishEventAsync(PUBSUB_NAME, TOPIC_NAME, order);
-
             return order;
         }
         catch (Exception ex)
@@ -57,7 +63,6 @@ public class DeliveryService : IDeliveryService
             _logger.LogError(ex, "Error delivering order {OrderId}", order.OrderId);
             order.Status = "delivery_failed";
             order.Error = ex.Message;
-
             await _daprClient.PublishEventAsync(PUBSUB_NAME, TOPIC_NAME, order);
             return order;
         }

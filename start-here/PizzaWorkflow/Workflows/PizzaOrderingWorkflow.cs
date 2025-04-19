@@ -1,7 +1,6 @@
-﻿﻿using Dapr.Workflow;
-using PizzaWorkflow.Models;
+﻿using Dapr.Workflow;
 using PizzaWorkflow.Activities;
-using Microsoft.Extensions.Logging;
+using PizzaWorkflow.Models;
 
 namespace PizzaWorkflow.Workflows;
 
@@ -12,9 +11,8 @@ public class PizzaOrderingWorkflow : Workflow<Order, Order>
         try
         {
             // Step 1: Place and process the order
-            var orderResult = await context.CallActivityAsync<Order>(
-              nameof(StorefrontActivity),
-              order);
+            await context.CallActivityAsync<Order>(nameof(StorefrontActivity), order);
+            var orderResult = await context.WaitForExternalEventAsync<Order>("OrderComplete");
 
             if (orderResult.Status != "confirmed")
             {
@@ -22,9 +20,8 @@ public class PizzaOrderingWorkflow : Workflow<Order, Order>
             }
 
             // Step 2: Cook the pizza
-            var cookingResult = await context.CallActivityAsync<Order>(
-              nameof(CookingActivity),
-              orderResult);
+            await context.CallActivityAsync<Order>(nameof(CookingActivity), orderResult);
+            var cookingResult = await context.WaitForExternalEventAsync<Order>("CookComplete");
 
             if (cookingResult.Status != "cooked")
             {
@@ -33,9 +30,7 @@ public class PizzaOrderingWorkflow : Workflow<Order, Order>
 
             // Update status to waiting for validation
             cookingResult.Status = "waiting_for_validation";
-            await context.CallActivityAsync<Order>(
-              nameof(ValidationActivity),
-              cookingResult);
+            await context.CallActivityAsync<Order>(nameof(ValidationActivity), cookingResult);
 
             // Step 3: Wait for manager validation
             var validationEvent = await context.WaitForExternalEventAsync<ValidationRequest>("ValidationComplete");
@@ -46,9 +41,8 @@ public class PizzaOrderingWorkflow : Workflow<Order, Order>
             }
 
             // Step 4: Deliver the pizza
-            var deliveryResult = await context.CallActivityAsync<Order>(
-              nameof(DeliveryActivity),
-              cookingResult);
+            await context.CallActivityAsync<Order>(nameof(DeliveryActivity), cookingResult);
+            var deliveryResult = await context.WaitForExternalEventAsync<Order>("DeliverComplete");
 
             if (deliveryResult.Status != "delivered")
             {
@@ -56,6 +50,7 @@ public class PizzaOrderingWorkflow : Workflow<Order, Order>
             }
 
             deliveryResult.Status = "completed";
+
             return deliveryResult;
         }
         catch (Exception ex)

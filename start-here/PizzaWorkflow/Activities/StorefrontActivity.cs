@@ -1,10 +1,11 @@
 ﻿using Dapr.Client;
 using Dapr.Workflow;
+using PizzaShared.Messages.StoreFront;
 using PizzaWorkflow.Models;
 
 namespace PizzaWorkflow.Activities;
 
-public class StorefrontActivity : WorkflowActivity<Order, Order>
+public class StorefrontActivity : WorkflowActivity<Order, object?>
 {
     private readonly DaprClient _daprClient;
     private readonly ILogger<StorefrontActivity> _logger;
@@ -15,22 +16,18 @@ public class StorefrontActivity : WorkflowActivity<Order, Order>
         _logger = logger;
     }
 
-    public override async Task<Order> RunAsync(WorkflowActivityContext context, Order order)
+    public override async Task<object?> RunAsync(WorkflowActivityContext context, Order order)
     {
         try
         {
             _logger.LogInformation("Starting ordering process for order {OrderId}", order.OrderId);
 
-            var response = await _daprClient.InvokeMethodAsync<Order, Order>(
-                HttpMethod.Post,
-                "pizza-storefront",
-                "/storefront/order",
-                order);
+            // MessageHelper.FillMessage bruges til at fylde en instans af OrderMessage
+            var message = MessageHelper.FillMessage<OrderMessage>(context, order);
 
-            _logger.LogInformation("Order {OrderId} processed with status {Status}",
-                order.OrderId, response.Status);
-
-            return response;
+            // message sendes med PublishEventAsync til pubsub
+            await _daprClient.PublishEventAsync("pizzapubsub", "storefront", message);
+            return null;
         }
         catch (Exception ex)
         {

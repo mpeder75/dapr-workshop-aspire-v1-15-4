@@ -1,11 +1,11 @@
-using PizzaKitchen.Models;
 using Dapr.Client;
+using PizzaShared.Messages.Kitchen;
 
 namespace PizzaKitchen.Services;
 
 public interface ICookService
 {
-    Task<Order> CookPizzaAsync(Order order);
+    Task<CookResultMessage> CookPizzaAsync(CookMessage order);
 }
 
 public class CookService : ICookService
@@ -22,7 +22,7 @@ public class CookService : ICookService
         _logger = logger;
     }
 
-    public async Task<Order> CookPizzaAsync(Order order)
+    public async Task<CookResultMessage> CookPizzaAsync(CookMessage cookMessage)
     {
         var stages = new (string status, int duration)[]
         {
@@ -31,6 +31,16 @@ public class CookService : ICookService
             ("cooking_adding_toppings", 2),
             ("cooking_baking", 5),
             ("cooking_quality_check", 1)
+        };
+
+        var order = new CookResultMessage
+        {
+            WorkflowId = cookMessage.WorkflowId,
+            OrderId = cookMessage.OrderId,
+            PizzaType = cookMessage.PizzaType,
+            Size = cookMessage.Size,
+            Customer = cookMessage.Customer,
+            Status = "unknown"
         };
 
         try
@@ -45,9 +55,7 @@ public class CookService : ICookService
             }
 
             order.Status = "cooked";
-
             await _daprClient.PublishEventAsync(PUBSUB_NAME, TOPIC_NAME, order);
-
             return order;
         }
         catch (Exception ex)
@@ -55,7 +63,6 @@ public class CookService : ICookService
             _logger.LogError(ex, "Error cooking order {OrderId}", order.OrderId);
             order.Status = "cooking_failed";
             order.Error = ex.Message;
-
             await _daprClient.PublishEventAsync(PUBSUB_NAME, TOPIC_NAME, order);
             return order;
         }

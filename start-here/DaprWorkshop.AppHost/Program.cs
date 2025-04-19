@@ -4,12 +4,6 @@ using System.Collections.Immutable;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-// Dapr state store
-// var statestore = builder.AddDaprStateStore("pizzastatestore");
-// Dapr PUB/SUB
-// var pubsubComponent = builder.AddDaprPubSub("pizzapubsub");
-
-// Aspire tilføjer PizzaOrder som resource, og konfigurer og opsætter Dapr sidecar 
 builder.AddProject<PizzaOrder>("pizzaorderservice")
     .WithDaprSidecar(new DaprSidecarOptions
     {
@@ -18,7 +12,6 @@ builder.AddProject<PizzaOrder>("pizzaorderservice")
         ResourcesPaths = ImmutableHashSet.Create("../resources")
     });
 
-// Aspire tilføjer PizzaKitchen som resource, og konfigurer og opsætter Dapr sidecar 
 builder.AddProject<PizzaKitchen>("pizzakitchenservice")
     .WithDaprSidecar(new DaprSidecarOptions
     {
@@ -27,8 +20,6 @@ builder.AddProject<PizzaKitchen>("pizzakitchenservice")
         ResourcesPaths = ImmutableHashSet.Create("../resources")
     });
 
-
-// Aspire tilføjer PizzaStorefront som resource, og konfigurer og opsætter Dapr sidecar 
 builder.AddProject<PizzaStorefront>("pizzastorefrontservice")
     .WithDaprSidecar(new DaprSidecarOptions
     {
@@ -37,7 +28,6 @@ builder.AddProject<PizzaStorefront>("pizzastorefrontservice")
         ResourcesPaths = ImmutableHashSet.Create("../resources")
     });
 
-// Aspire tilføjer PizzaDelivery som resource, og konfigurer og opsætter Dapr sidecar 
 builder.AddProject<PizzaDelivery>("pizzadeliveryservice")
     .WithDaprSidecar(new DaprSidecarOptions
     {
@@ -46,7 +36,6 @@ builder.AddProject<PizzaDelivery>("pizzadeliveryservice")
         ResourcesPaths = ImmutableHashSet.Create("../resources")
     });
 
-// Aspire tilføjer PizzaWorkflow som resource, og konfigurer og opsætter Dapr sidecar
 builder.AddProject<PizzaWorkflow>("pizzaworkflowservice")
     .WithDaprSidecar(new DaprSidecarOptions
     {
