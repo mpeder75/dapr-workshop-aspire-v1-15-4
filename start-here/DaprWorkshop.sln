@@ -20,6 +20,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DaprWorkshop.AppHost", "Dap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DaprWorkshop.ServiceDefaults", "DaprWorkshop.ServiceDefaults\DaprWorkshop.ServiceDefaults.csproj", "{DA025439-1CC0-3C60-A7ED-E799A5275CB7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaShared", "PizzaShared\PizzaShared.csproj", "{72664387-DE1E-4B23-9C75-B324FC46E107}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaWorkflow", "PizzaWorkflow\PizzaWorkflow.csproj", "{925C8A1F-E079-4EB6-B588-35BC63A838B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +54,14 @@ Global
 		{DA025439-1CC0-3C60-A7ED-E799A5275CB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA025439-1CC0-3C60-A7ED-E799A5275CB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA025439-1CC0-3C60-A7ED-E799A5275CB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72664387-DE1E-4B23-9C75-B324FC46E107}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72664387-DE1E-4B23-9C75-B324FC46E107}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72664387-DE1E-4B23-9C75-B324FC46E107}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72664387-DE1E-4B23-9C75-B324FC46E107}.Release|Any CPU.Build.0 = Release|Any CPU
+		{925C8A1F-E079-4EB6-B588-35BC63A838B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{925C8A1F-E079-4EB6-B588-35BC63A838B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{925C8A1F-E079-4EB6-B588-35BC63A838B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{925C8A1F-E079-4EB6-B588-35BC63A838B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
